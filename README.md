@@ -4,6 +4,10 @@ The Abstract is a private, browser-first document summarizer. Drop in a PDF or i
 
 The interface is designed as an editorial reading desk: source material stays visible, summaries are treated as finished briefs, and every action is explicit.
 
+## Live app
+
+Try the deployed app at [unthinkable-summarizeee.vercel.app](https://unthinkable-summarizeee.vercel.app/).
+
 ## What it does
 
 - Accepts PDF, PNG, JPG, JPEG, and WebP files up to 10 MB.
