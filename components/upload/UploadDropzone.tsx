@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import React, { useState, useRef, DragEvent, ChangeEvent } from 'react';
-import { UploadCloud, FileText, Image as ImageIcon, Sparkles, ShieldCheck } from 'lucide-react';
+import { ArrowDown, FileText, Image as ImageIcon, Sparkles, ShieldCheck } from 'lucide-react';
 import { SUPPORTED_EXTENSIONS, MAX_FILE_SIZE_MB } from '@/lib/validation/validateFile';
 
 interface UploadDropzoneProps {
@@ -74,10 +74,10 @@ export function UploadDropzone({ onFileSelected, disabled = false, onSelectSampl
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        className={`group relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-8 sm:p-12 text-center transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+        className={`group relative min-h-[410px] cursor-pointer overflow-hidden border p-6 transition-all duration-200 focus:outline-none sm:p-8 ${
           isDragOver
-            ? 'border-blue-500 bg-blue-50/70 dark:border-blue-400 dark:bg-blue-950/40 scale-[1.01]'
-            : 'border-zinc-300 bg-zinc-50/50 hover:border-zinc-400 hover:bg-zinc-100/60 dark:border-zinc-700 dark:bg-zinc-900/40 dark:hover:border-zinc-600 dark:hover:bg-zinc-800/40'
+            ? 'border-[var(--cobalt)] bg-blue-50'
+            : 'border-[var(--ink)] bg-[var(--paper-bright)] hover:bg-white'
         } ${disabled ? 'pointer-events-none opacity-50' : ''}`}
       >
         <input
@@ -89,56 +89,49 @@ export function UploadDropzone({ onFileSelected, disabled = false, onSelectSampl
           disabled={disabled}
         />
 
-        <div
-          className={`flex h-16 w-16 items-center justify-center rounded-2xl transition-transform duration-200 group-hover:scale-110 ${
-            isDragOver
-              ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30'
-              : 'bg-blue-100 text-blue-600 dark:bg-blue-950 dark:text-blue-400'
-          }`}
-        >
-          <UploadCloud className="h-8 w-8" />
+        <div className="flex items-start justify-between border-b border-[var(--ink)] pb-4">
+          <span className="font-utility text-[10px] uppercase tracking-[0.2em]">New source</span>
+          <span className="font-editorial text-3xl italic text-[var(--oxblood)]">01</span>
         </div>
 
-        <h3 className="mt-5 text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-          Upload your document or image
-        </h3>
+        <div className="flex min-h-[250px] flex-col justify-between py-7">
+          <ArrowDown
+            className={`h-14 w-14 transition-all duration-300 group-hover:translate-y-1 ${isDragOver ? 'text-[var(--cobalt)]' : 'text-[var(--ink)]'}`}
+            strokeWidth={1}
+          />
+          <div>
+            <h3 className="max-w-sm font-editorial text-4xl font-medium leading-[0.95] sm:text-5xl">
+              Drop a document into the reading desk.
+            </h3>
+            <p className="mt-4 max-w-sm text-sm leading-6 text-[var(--muted)]">
+              Drag it here or <span className="border-b border-[var(--cobalt)] text-[var(--cobalt)]">choose a file</span> from your device.
+            </p>
+          </div>
+        </div>
 
-        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400 max-w-sm">
-          Drag and drop your file here, or{' '}
-          <span className="font-medium text-blue-600 hover:underline dark:text-blue-400">browse files</span>
-        </p>
-
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
-          <span className="inline-flex items-center gap-1 rounded-md bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300">
-            <FileText className="h-3.5 w-3.5 text-red-500" /> PDF
-          </span>
-          <span className="inline-flex items-center gap-1 rounded-md bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300">
-            <ImageIcon className="h-3.5 w-3.5 text-blue-500" /> PNG, JPG, JPEG, WebP
-          </span>
-          <span className="rounded-md bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
-            Up to {MAX_FILE_SIZE_MB}MB
-          </span>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-[var(--rule)] pt-4 font-utility text-[9px] uppercase tracking-[0.12em] text-[var(--muted)]">
+          <span className="inline-flex items-center gap-1.5"><FileText className="h-3.5 w-3.5 text-[var(--oxblood)]" /> PDF</span>
+          <span className="inline-flex items-center gap-1.5"><ImageIcon className="h-3.5 w-3.5 text-[var(--cobalt)]" /> PNG / JPG / WebP</span>
+          <span className="ml-auto">Max {MAX_FILE_SIZE_MB}MB</span>
         </div>
       </div>
 
-      {/* Sample presets for fast testing */}
       {onSelectSample && (
-        <div className="mt-4 flex items-center justify-center gap-3 text-xs text-zinc-500 dark:text-zinc-400">
-          <span>Need a sample to test?</span>
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--rule)] pb-4 text-xs text-[var(--muted)]">
+          <span>No document at hand?</span>
           <button
             type="button"
             onClick={() => onSelectSample('sample-doc')}
-            className="font-medium text-blue-600 hover:underline dark:text-blue-400 inline-flex items-center gap-1"
+            className="inline-flex items-center gap-1.5 font-utility text-[9px] uppercase tracking-[0.12em] text-[var(--cobalt)] hover:underline"
           >
-            <Sparkles className="h-3 w-3" /> Load Sample Article
+            <Sparkles className="h-3 w-3" /> Open the sample article
           </button>
         </div>
       )}
 
-      {/* Privacy Guarantee Note */}
-      <div className="mt-4 flex items-center justify-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
-        <ShieldCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-        <span>Client-side extraction: Your files never leave your browser. Only text is summarized.</span>
+      <div className="mt-4 flex items-start gap-2 text-[11px] leading-5 text-[var(--muted)]">
+        <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[var(--cobalt)]" />
+        <span>Original files stay in this browser. Only extracted text moves to summarization.</span>
       </div>
     </div>
   );

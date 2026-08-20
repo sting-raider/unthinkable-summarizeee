@@ -9,7 +9,6 @@ import {
   FileText,
   Sparkles,
   Layers,
-  Clock,
   RotateCcw,
 } from 'lucide-react';
 import { SummarizeResponse } from '@/types/summary';
@@ -86,138 +85,126 @@ ${result.keyPoints.map((p) => `- ${p}`).join('\n')}
     : 0;
 
   return (
-    <div className="w-full rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
-      {/* Header & Stats */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-zinc-100 dark:border-zinc-800">
+    <article className="paper-panel editorial-reveal w-full p-5 sm:p-8 lg:p-10">
+      <div className="flex flex-col justify-between gap-5 border-b-4 border-[var(--ink)] pb-6 sm:flex-row sm:items-end">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-100 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400">
-              <Sparkles className="h-4 w-4" />
+          <div className="flex items-center gap-3">
+            <span className="flex h-8 w-8 items-center justify-center bg-[var(--cobalt)] text-white">
+              <Sparkles className="h-4 w-4" strokeWidth={1.5} />
             </span>
-            <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
-              Document Summary
-            </h3>
-            <Badge variant="primary" className="uppercase">
-              {selectedLength}
-            </Badge>
+            <span className="font-utility text-[10px] uppercase tracking-[0.18em] text-[var(--oxblood)]">Final edit</span>
           </div>
-          <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-            Synthesized from <span className="font-medium text-zinc-700 dark:text-zinc-300">{document.fileName}</span>
+          <h3 className="mt-4 font-editorial text-5xl font-medium leading-none tracking-[-0.035em] sm:text-7xl">
+            The brief.
+          </h3>
+          <p className="mt-3 max-w-md truncate text-xs text-[var(--muted)]">
+            Edited from <span className="text-[var(--ink)]">{document.fileName}</span>
           </p>
         </div>
 
-        {/* Compression & Metric Badges */}
-        <div className="flex flex-wrap items-center gap-2 text-xs">
-          <Badge variant="default" className="gap-1">
-            <FileText className="h-3 w-3 text-zinc-500" />
-            {result.wordCount.toLocaleString()} words generated
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge variant="primary">{selectedLength} edit</Badge>
+          <Badge variant="default" className="gap-1.5">
+            <FileText className="h-3 w-3" />
+            {result.wordCount.toLocaleString()} words
           </Badge>
           {compressionPercent > 0 && (
-            <Badge variant="success" className="gap-1">
-              <Layers className="h-3 w-3 text-emerald-600" />
-              {compressionPercent}% condensed
+            <Badge variant="success" className="gap-1.5">
+              <Layers className="h-3 w-3" />
+              {compressionPercent}% shorter
             </Badge>
           )}
           {result.chunksProcessed && result.chunksProcessed > 1 && (
-            <Badge variant="secondary">
-              {result.chunksProcessed} map-reduce chunks
-            </Badge>
+            <Badge variant="secondary">{result.chunksProcessed} sections</Badge>
           )}
         </div>
       </div>
 
-      {/* Main Prose Summary */}
-      <div className="space-y-4">
-        <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-          Executive Summary
-        </h4>
-        <div className="prose prose-zinc dark:prose-invert max-w-none text-sm leading-relaxed text-zinc-800 dark:text-zinc-200">
+      <section className="py-8 sm:py-10">
+        <div className="mb-5 flex items-center justify-between border-b border-[var(--rule)] pb-3">
+          <h4 className="font-utility text-[10px] uppercase tracking-[0.18em] text-[var(--oxblood)]">Overview</h4>
+          <span className="font-editorial text-lg italic text-[var(--muted)]">Read time: {Math.max(1, Math.ceil(result.wordCount / 200))} min</span>
+        </div>
+        <div className="max-w-[780px] font-editorial text-xl leading-[1.65] text-[var(--ink)] sm:text-[1.4rem]">
           {result.summary.split('\n\n').map((paragraph, i) => (
-            <p key={i} className="mb-3">
+            <p key={i} className={`${i === 0 ? 'first-letter:float-left first-letter:mr-2 first-letter:font-editorial first-letter:text-6xl first-letter:font-semibold first-letter:leading-[0.8] first-letter:text-[var(--cobalt)]' : ''} mb-5`}>
               {paragraph}
             </p>
           ))}
         </div>
-      </div>
+      </section>
 
-      {/* Key Takeaways List */}
-      <div className="pt-2">
+      <section>
         <KeyPoints points={result.keyPoints} />
-      </div>
+      </section>
 
-      {/* Action Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pt-5 border-t border-zinc-100 dark:border-zinc-800">
-        <div className="flex flex-wrap items-center gap-2">
-          {/* Copy Summary */}
+      <div className="mt-8 flex flex-col justify-between gap-5 border-t-4 border-[var(--ink)] pt-5 lg:flex-row lg:items-center">
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
           <button
             type="button"
             onClick={handleCopySummary}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-zinc-200 bg-white px-3.5 py-2 text-xs font-semibold text-zinc-800 shadow-sm transition hover:bg-zinc-50 active:scale-95 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
+            className="inline-flex items-center gap-1.5 border-b border-[var(--ink)] py-1 font-utility text-[9px] uppercase tracking-[0.1em] transition hover:text-[var(--cobalt)]"
           >
             {copiedType === 'summary' ? (
               <>
-                <Check className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                <span className="text-emerald-600 dark:text-emerald-400">Copied Summary!</span>
+                <Check className="h-4 w-4 text-[var(--cobalt)]" />
+                <span>Brief copied</span>
               </>
             ) : (
               <>
-                <Copy className="h-4 w-4 text-zinc-500" />
-                <span>Copy Summary</span>
+                <Copy className="h-4 w-4" />
+                <span>Copy brief</span>
               </>
             )}
           </button>
 
-          {/* Copy All */}
           <button
             type="button"
             onClick={handleCopyAll}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-zinc-200 bg-white px-3.5 py-2 text-xs font-semibold text-zinc-800 shadow-sm transition hover:bg-zinc-50 active:scale-95 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
+            className="inline-flex items-center gap-1.5 border-b border-[var(--ink)] py-1 font-utility text-[9px] uppercase tracking-[0.1em] transition hover:text-[var(--cobalt)]"
           >
             {copiedType === 'all' ? (
               <>
-                <Check className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                <span className="text-emerald-600 dark:text-emerald-400">Copied All!</span>
+                <Check className="h-4 w-4 text-[var(--cobalt)]" />
+                <span>Markdown copied</span>
               </>
             ) : (
               <>
-                <Copy className="h-4 w-4 text-zinc-500" />
-                <span>Copy All (Markdown)</span>
+                <Copy className="h-4 w-4" />
+                <span>Copy markdown</span>
               </>
             )}
           </button>
 
-          {/* Download */}
           <button
             type="button"
             onClick={handleDownload}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-zinc-200 bg-white px-3.5 py-2 text-xs font-semibold text-zinc-800 shadow-sm transition hover:bg-zinc-50 active:scale-95 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
+            className="inline-flex items-center gap-1.5 border-b border-[var(--ink)] py-1 font-utility text-[9px] uppercase tracking-[0.1em] transition hover:text-[var(--cobalt)]"
           >
-            <Download className="h-4 w-4 text-zinc-500" />
-            <span>Download .md</span>
+            <Download className="h-4 w-4" />
+            <span>Download MD</span>
           </button>
 
-          {/* Regenerate */}
           <button
             type="button"
             onClick={onRegenerate}
             disabled={isRegenerating}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-zinc-200 bg-white px-3.5 py-2 text-xs font-semibold text-zinc-800 shadow-sm transition hover:bg-zinc-50 active:scale-95 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
+            className="inline-flex items-center gap-1.5 border-b border-[var(--ink)] py-1 font-utility text-[9px] uppercase tracking-[0.1em] transition hover:text-[var(--cobalt)] disabled:opacity-50"
           >
-            <RotateCcw className={`h-4 w-4 text-zinc-500 ${isRegenerating ? 'animate-spin' : ''}`} />
-            <span>Regenerate</span>
+            <RotateCcw className={`h-4 w-4 ${isRegenerating ? 'animate-spin' : ''}`} />
+            <span>Recompose</span>
           </button>
         </div>
 
-        {/* Upload Another */}
         <button
           type="button"
           onClick={onUploadAnother}
-          className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-sm shadow-blue-500/20 transition hover:bg-blue-700 active:scale-95 dark:bg-blue-600 dark:hover:bg-blue-500"
+          className="inline-flex items-center justify-center gap-2 bg-[var(--ink)] px-5 py-3 font-utility text-[9px] uppercase tracking-[0.12em] text-white transition hover:bg-[var(--cobalt)]"
         >
           <PlusCircle className="h-4 w-4" />
-          <span>Upload Another</span>
+          <span>Start another brief</span>
         </button>
       </div>
-    </div>
+    </article>
   );
 }

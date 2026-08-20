@@ -2,12 +2,11 @@
 
 import React, { useState } from 'react';
 import {
-  Sparkles,
-  FileSearch,
   ShieldCheck,
-  Zap,
   BookOpen,
   ArrowRight,
+  FileText,
+  ScanText,
 } from 'lucide-react';
 import { ExtractedDocument, ProcessingStage, SummaryLength, OCRProgressInfo } from '@/types/document';
 import { SummarizeResponse } from '@/types/summary';
@@ -84,7 +83,7 @@ export default function Home() {
   };
 
   // Sample Loader
-  const handleLoadSample = (sampleType: 'sample-doc' | 'sample-image') => {
+  const handleLoadSample = () => {
     setErrorMessage(null);
     setSummaryResult(null);
 
@@ -150,167 +149,197 @@ export default function Home() {
   const isBusy = stage === 'extracting' || stage === 'ocr' || isSummarizing;
 
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Top Navbar / Header */}
-      <header className="border-b border-zinc-200 bg-white/80 backdrop-blur-md sticky top-0 z-30 dark:border-zinc-800 dark:bg-zinc-950/80">
-        <div className="mx-auto max-w-4xl px-4 py-3.5 sm:px-6 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-sm shadow-blue-500/30">
-              <Sparkles className="h-5 w-5" />
-            </div>
-            <div>
-              <h1 className="text-base font-bold tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                Document Summary Assistant
-              </h1>
-              <p className="text-[11px] text-zinc-500 dark:text-zinc-400 hidden sm:block">
-                Client-Side Extraction • DeepSeek AI Summarization
-              </p>
-            </div>
-          </div>
+    <div className="min-h-screen">
+      <header className="mx-auto w-full max-w-[1440px] px-4 pt-5 sm:px-8 lg:px-12">
+        <div className="flex items-center justify-between border-y border-[var(--ink)] py-2 font-utility text-[10px] uppercase tracking-[0.18em] sm:text-[11px]">
+          <span>Vol. 01 / The reading issue</span>
+          <span className="inline-flex items-center gap-2 text-[var(--cobalt)]">
+            <ShieldCheck className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline">Private browser extraction</span>
+            <span className="sm:hidden">Private</span>
+          </span>
+        </div>
 
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/60">
-              <ShieldCheck className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">100% Private Client-Side Parsing</span>
-              <span className="sm:hidden">Private</span>
-            </span>
-          </div>
+        <div className="relative flex items-end justify-between overflow-hidden border-b-4 border-[var(--ink)] py-4 sm:py-6">
+          <div className="absolute bottom-0 left-[19%] top-0 hidden w-2 bg-[var(--cobalt)] sm:block" aria-hidden="true" />
+          <h1 className="font-editorial text-[clamp(3.75rem,12vw,10rem)] font-semibold leading-[0.73] tracking-[-0.075em]">
+            The Abstract
+          </h1>
+          <p className="mb-1 hidden max-w-[175px] text-right text-xs leading-4 text-[var(--muted)] lg:block">
+            An intelligent reading desk for documents worth understanding.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--ink)] py-2 font-utility text-[9px] uppercase tracking-[0.16em] sm:text-[10px]">
+          <span>PDF & image reader</span>
+          <span className="text-[var(--oxblood)]">Extraction / Synthesis / Key points</span>
+          <span className="hidden sm:inline">Powered by DeepSeek</span>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="flex-1 mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 space-y-6">
-        {/* Intro banner */}
+      <main className="mx-auto w-full max-w-[1440px] px-4 sm:px-8 lg:px-12">
         {!document && (
-          <div className="text-center space-y-2 py-4">
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
-              Instant, grounded summaries for your documents
-            </h2>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 max-w-lg mx-auto">
-              Upload a PDF or image to extract readable text directly inside your browser and generate structured summaries with key takeaway points.
-            </p>
+          <section className="grid border-b border-[var(--ink)] lg:grid-cols-12">
+            <div className="relative border-b border-[var(--ink)] py-12 pr-0 sm:py-16 lg:col-span-7 lg:border-b-0 lg:border-r lg:pr-12 xl:py-20">
+              <p className="mb-7 font-utility text-[10px] uppercase tracking-[0.22em] text-[var(--oxblood)]">
+                The document brief, reconsidered
+              </p>
+              <h2 className="max-w-[760px] font-editorial text-[clamp(3.6rem,8vw,8rem)] font-medium leading-[0.78] tracking-[-0.055em]">
+                Turn the source <span className="italic text-[var(--cobalt)]">into signal.</span>
+              </h2>
+              <div className="mt-10 grid max-w-2xl gap-6 border-t border-[var(--rule)] pt-5 sm:grid-cols-[1fr_1.4fr]">
+                <p className="font-utility text-[10px] uppercase leading-5 tracking-[0.14em] text-[var(--muted)]">
+                  For reports, research, scans, and the long reads waiting in your tabs.
+                </p>
+                <p className="text-base leading-7 text-[var(--ink)] sm:text-lg">
+                  Extract any PDF or image in your browser, then shape it into a clear brief with the depth you need.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center py-10 lg:col-span-5 lg:pl-10 xl:pl-14">
+              {!isBusy && (
+                <UploadDropzone
+                  onFileSelected={handleFileSelected}
+                  disabled={isBusy}
+                  onSelectSample={handleLoadSample}
+                />
+              )}
+              {(stage === 'extracting' || stage === 'ocr') && (
+                <ProcessingStatus stage={stage} ocrProgress={ocrProgress} pdfProgress={pdfProgress} />
+              )}
+            </div>
+          </section>
+        )}
+
+        {!document && (
+          <section className="grid border-b border-[var(--ink)] sm:grid-cols-3">
+            {[
+              { icon: FileText, title: 'Read the source', copy: 'PDF text and image OCR are extracted locally.' },
+              { icon: ScanText, title: 'Set the depth', copy: 'Choose a quick brief or a fuller editorial digest.' },
+              { icon: BookOpen, title: 'Keep the insight', copy: 'Copy, download, or regenerate the finished summary.' },
+            ].map((item, index) => (
+              <article
+                key={item.title}
+                className={`group py-7 sm:px-6 ${index < 2 ? 'border-b border-[var(--rule)] sm:border-b-0 sm:border-r' : ''} ${index === 0 ? 'sm:pl-0' : ''}`}
+              >
+                <div className="mb-5 flex items-center justify-between">
+                  <item.icon className="h-5 w-5 text-[var(--cobalt)]" strokeWidth={1.5} />
+                  <span className="font-editorial text-2xl italic text-[var(--rule)]">0{index + 1}</span>
+                </div>
+                <h3 className="font-editorial text-2xl font-semibold">{item.title}</h3>
+                <p className="mt-2 max-w-xs text-sm leading-6 text-[var(--muted)]">{item.copy}</p>
+              </article>
+            ))}
+          </section>
+        )}
+
+        {errorMessage && (
+          <div className="py-6">
+            <ErrorMessage
+              message={errorMessage}
+              onDismiss={() => setErrorMessage(null)}
+              onRetry={document ? () => handleGenerateSummary(selectedLength) : undefined}
+            />
           </div>
         )}
 
-        {/* Error Alert Display */}
-        {errorMessage && (
-          <ErrorMessage
-            message={errorMessage}
-            onDismiss={() => setErrorMessage(null)}
-            onRetry={document ? () => handleGenerateSummary(selectedLength) : undefined}
-          />
+        {(stage === 'extracting' || stage === 'ocr') && document && (
+          <div className="py-10">
+            <ProcessingStatus stage={stage} ocrProgress={ocrProgress} pdfProgress={pdfProgress} />
+          </div>
         )}
 
-        {/* 1. Upload Dropzone (When no document selected) */}
-        {!document && !isBusy && (
-          <UploadDropzone
-            onFileSelected={handleFileSelected}
-            disabled={isBusy}
-            onSelectSample={handleLoadSample}
-          />
-        )}
-
-        {/* 2. Processing Status (During extraction or OCR) */}
-        {(stage === 'extracting' || stage === 'ocr') && (
-          <ProcessingStatus
-            stage={stage}
-            ocrProgress={ocrProgress}
-            pdfProgress={pdfProgress}
-          />
-        )}
-
-        {/* 3. Document Ready View (Document selected) */}
         {document && (
-          <div className="space-y-6">
-            {/* Selected File Card */}
-            <SelectedFile
-              document={document}
-              onRemove={handleReset}
-              onReplace={handleReset}
-              disabled={isBusy}
-            />
+          <section className="editorial-reveal py-8 sm:py-12">
+            <div className="mb-8 grid gap-5 border-b-4 border-[var(--ink)] pb-6 md:grid-cols-[1fr_auto] md:items-end">
+              <div>
+                <p className="font-utility text-[10px] uppercase tracking-[0.2em] text-[var(--oxblood)]">The reading desk</p>
+                <h2 className="mt-2 font-editorial text-5xl font-medium tracking-[-0.035em] sm:text-7xl">A brief in progress.</h2>
+              </div>
+              <p className="max-w-xs text-sm leading-6 text-[var(--muted)] md:text-right">
+                Source text stays in context while you choose the shape of the final edit.
+              </p>
+            </div>
 
-            {/* Extracted Text Collapsible Preview */}
-            <ExtractedTextPreview
-              text={document.text}
-              wordCount={document.wordCount}
-            />
+            <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_340px]">
+              <div className="min-w-0 space-y-7">
+                <SelectedFile document={document} onRemove={handleReset} onReplace={handleReset} disabled={isBusy} />
+                <ExtractedTextPreview text={document.text} wordCount={document.wordCount} />
 
-            {/* Summary Configuration Card */}
-            {!summaryResult && (
-              <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-6">
-                <SummaryLengthSelector
-                  value={selectedLength}
-                  onChange={(len) => setSelectedLength(len)}
-                  disabled={isBusy}
-                />
+                {!summaryResult && (
+                  <div className="paper-panel p-5 sm:p-8">
+                    <SummaryLengthSelector value={selectedLength} onChange={setSelectedLength} disabled={isBusy} />
 
-                {/* Processing Indicator while AI is summarizing */}
-                {isSummarizing && (
-                  <ProcessingStatus stage="summarizing" />
+                    {isSummarizing && <div className="mt-8"><ProcessingStatus stage="summarizing" /></div>}
+
+                    {!isSummarizing && (
+                      <div className="mt-8 flex justify-end border-t border-[var(--ink)] pt-5">
+                        <button
+                          type="button"
+                          onClick={() => handleGenerateSummary(selectedLength)}
+                          disabled={isBusy}
+                          className="group inline-flex w-full items-center justify-between bg-[var(--ink)] px-5 py-4 font-utility text-[11px] uppercase tracking-[0.12em] text-white transition hover:bg-[var(--cobalt)] disabled:cursor-not-allowed disabled:opacity-45 sm:w-auto sm:min-w-72"
+                        >
+                          <span>Compose {selectedLength} brief</span>
+                          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 )}
 
-                {/* Generate Summary CTA Button */}
-                {!isSummarizing && (
-                  <div className="flex justify-end pt-2 border-t border-zinc-100 dark:border-zinc-800">
-                    <button
-                      type="button"
-                      onClick={() => handleGenerateSummary(selectedLength)}
-                      disabled={isBusy}
-                      className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-md shadow-blue-500/25 transition hover:from-blue-700 hover:to-indigo-700 active:scale-95 disabled:opacity-50 cursor-pointer"
-                    >
-                      <Sparkles className="h-4 w-4" />
-                      <span>Generate {selectedLength.toUpperCase()} Summary</span>
-                      <ArrowRight className="h-4 w-4" />
-                    </button>
+                {summaryResult && (
+                  <div className="space-y-7">
+                    <div className="border-y border-[var(--ink)] py-5">
+                      <SummaryLengthSelector
+                        value={selectedLength}
+                        onChange={(newLen) => {
+                          setSelectedLength(newLen);
+                          handleGenerateSummary(newLen);
+                        }}
+                        disabled={isBusy}
+                      />
+                    </div>
+                    {isSummarizing && <ProcessingStatus stage="summarizing" />}
+                    {!isSummarizing && (
+                      <SummaryResult
+                        document={document}
+                        result={summaryResult}
+                        selectedLength={selectedLength}
+                        onUploadAnother={handleReset}
+                        onRegenerate={() => handleGenerateSummary(selectedLength)}
+                        isRegenerating={isSummarizing}
+                      />
+                    )}
                   </div>
                 )}
               </div>
-            )}
 
-            {/* 4. Results View */}
-            {summaryResult && (
-              <div className="space-y-6">
-                {/* Summary Length Quick-Switch within Results */}
-                <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-                  <SummaryLengthSelector
-                    value={selectedLength}
-                    onChange={(newLen) => {
-                      setSelectedLength(newLen);
-                      handleGenerateSummary(newLen);
-                    }}
-                    disabled={isBusy}
-                  />
+              <aside className="border-t border-[var(--ink)] pt-5 xl:border-l xl:border-t-0 xl:pl-7 xl:pt-0">
+                <p className="font-utility text-[10px] uppercase tracking-[0.18em] text-[var(--oxblood)]">Editorial note</p>
+                <p className="mt-5 font-editorial text-3xl leading-tight">
+                  “Clarity is the courtesy a summary owes its source.”
+                </p>
+                <div className="mt-8 space-y-3 border-t border-[var(--rule)] pt-5 font-utility text-[10px] uppercase tracking-[0.12em] text-[var(--muted)]">
+                  <div className="flex justify-between gap-4"><span>Source words</span><span>{document.wordCount.toLocaleString()}</span></div>
+                  <div className="flex justify-between gap-4"><span>Reading time</span><span>{document.readingTimeMinutes} min</span></div>
+                  <div className="flex justify-between gap-4"><span>Current edit</span><span>{selectedLength}</span></div>
                 </div>
-
-                {isSummarizing && (
-                  <ProcessingStatus stage="summarizing" />
-                )}
-
-                {!isSummarizing && (
-                  <SummaryResult
-                    document={document}
-                    result={summaryResult}
-                    selectedLength={selectedLength}
-                    onUploadAnother={handleReset}
-                    onRegenerate={() => handleGenerateSummary(selectedLength)}
-                    isRegenerating={isSummarizing}
-                  />
-                )}
-              </div>
-            )}
-          </div>
+              </aside>
+            </div>
+          </section>
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-zinc-200 bg-white py-6 dark:border-zinc-800 dark:bg-zinc-950 text-center text-xs text-zinc-500 dark:text-zinc-400">
-        <div className="mx-auto max-w-4xl px-4 space-y-2">
-          <p>
-            Document Summary Assistant — Built with Next.js, TypeScript, PDF.js, Tesseract.js & DeepSeek AI.
-          </p>
-          <p className="text-[11px] text-zinc-400 dark:text-zinc-500">
-            Client-side text extraction ensures original files remain private in your browser.
+      <footer className="mx-auto mt-10 w-full max-w-[1440px] px-4 pb-6 sm:px-8 lg:px-12">
+        <div className="grid gap-6 border-t-4 border-[var(--ink)] pt-5 sm:grid-cols-[1fr_auto] sm:items-end">
+          <div>
+            <p className="font-editorial text-3xl font-semibold">The Abstract</p>
+            <p className="mt-1 text-xs text-[var(--muted)]">Original files remain in your browser. Only extracted text is summarized.</p>
+          </div>
+          <p className="font-utility text-[9px] uppercase tracking-[0.16em] text-[var(--muted)] sm:text-right">
+            Next.js / PDF.js / Tesseract / DeepSeek
           </p>
         </div>
       </footer>

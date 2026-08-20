@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { SummaryLength } from '@/types/document';
-import { Sparkles, AlignLeft, FileText, Zap } from 'lucide-react';
+import { AlignLeft, FileText, Zap } from 'lucide-react';
 
 interface SummaryLengthSelectorProps {
   value: SummaryLength;
@@ -20,21 +20,21 @@ export function SummaryLengthSelector({ value, onChange, disabled = false }: Sum
   }[] = [
     {
       id: 'short',
-      label: 'Short',
+      label: 'Brief',
       target: '~100–150 words',
       icon: <Zap className="h-4 w-4" />,
       description: 'Quick snapshot & primary takeaway',
     },
     {
       id: 'medium',
-      label: 'Medium',
+      label: 'Standard',
       target: '~250–400 words',
       icon: <AlignLeft className="h-4 w-4" />,
       description: 'Balanced overview & core arguments',
     },
     {
       id: 'long',
-      label: 'Long',
+      label: 'Extended',
       target: '~500–700 words',
       icon: <FileText className="h-4 w-4" />,
       description: 'Comprehensive analysis & deep context',
@@ -43,14 +43,14 @@ export function SummaryLengthSelector({ value, onChange, disabled = false }: Sum
 
   return (
     <div className="w-full">
-      <div className="flex items-center justify-between mb-3">
-        <label className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
-          <Sparkles className="h-3.5 w-3.5 text-blue-500" />
-          Select Summary Detail Level
+      <div className="mb-4 flex items-end justify-between gap-4">
+        <label className="font-utility text-[10px] uppercase tracking-[0.18em] text-[var(--oxblood)]">
+          Choose the edit
         </label>
+        <span className="hidden text-xs text-[var(--muted)] sm:inline">How much context should the final brief keep?</span>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 border border-[var(--ink)] sm:grid-cols-3">
         {options.map((opt) => {
           const isSelected = value === opt.id;
           return (
@@ -59,26 +59,24 @@ export function SummaryLengthSelector({ value, onChange, disabled = false }: Sum
               type="button"
               onClick={() => onChange(opt.id)}
               disabled={disabled}
-              className={`flex flex-col text-left p-3.5 rounded-xl border transition-all duration-150 relative ${
+              className={`relative flex flex-col p-4 text-left transition-colors sm:min-h-32 ${
                 isSelected
-                  ? 'border-blue-600 bg-blue-50/50 ring-2 ring-blue-500/20 dark:border-blue-500 dark:bg-blue-950/30'
-                  : 'border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50/50 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700'
-              } ${disabled ? 'opacity-50 pointer-events-none' : 'cursor-pointer'}`}
+                  ? 'bg-[var(--cobalt)] text-white'
+                  : 'bg-[var(--paper-bright)] hover:bg-white'
+              } border-b border-[var(--ink)] last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0 ${disabled ? 'pointer-events-none opacity-50' : 'cursor-pointer'}`}
             >
               <div className="flex items-center justify-between w-full">
                 <span
-                  className={`inline-flex items-center gap-1.5 text-sm font-semibold ${
-                    isSelected ? 'text-blue-700 dark:text-blue-400' : 'text-zinc-900 dark:text-zinc-100'
-                  }`}
+                  className={`inline-flex items-center gap-1.5 font-utility text-[9px] uppercase tracking-[0.12em] ${isSelected ? 'text-white' : 'text-[var(--ink)]'}`}
                 >
                   {opt.icon}
                   {opt.label}
                 </span>
-                <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400">
+                <span className={`font-utility text-[9px] ${isSelected ? 'text-blue-100' : 'text-[var(--muted)]'}`}>
                   {opt.target}
                 </span>
               </div>
-              <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+              <p className={`mt-auto pt-7 text-xs leading-5 ${isSelected ? 'text-blue-50' : 'text-[var(--muted)]'}`}>
                 {opt.description}
               </p>
             </button>

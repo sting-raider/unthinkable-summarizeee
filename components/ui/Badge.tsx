@@ -9,14 +9,14 @@ interface BadgeProps {
 }
 
 export function Badge({ children, variant = 'default', className }: BadgeProps) {
-  const base = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium';
+  const base = 'inline-flex items-center border px-2 py-1 font-utility text-[8px] uppercase tracking-[0.12em]';
   
   const variants = {
-    default: 'bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-700',
-    primary: 'bg-blue-50 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300 border border-blue-200 dark:border-blue-800',
-    success: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800',
-    warning: 'bg-amber-50 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300 border border-amber-200 dark:border-amber-800',
-    secondary: 'bg-purple-50 text-purple-700 dark:bg-purple-950/50 dark:text-purple-300 border border-purple-200 dark:border-purple-800',
+    default: 'border-[var(--rule)] bg-[var(--paper)] text-[var(--muted)]',
+    primary: 'border-[var(--cobalt)] bg-blue-50 text-[var(--cobalt)]',
+    success: 'border-emerald-700 bg-emerald-50 text-emerald-800',
+    warning: 'border-amber-700 bg-amber-50 text-amber-800',
+    secondary: 'border-[var(--oxblood)] bg-red-50 text-[var(--oxblood)]',
   };
 
   return <span className={twMerge(clsx(base, variants[variant], className))}>{children}</span>;
