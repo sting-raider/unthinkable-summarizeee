@@ -19,8 +19,8 @@ export function ProcessingStatus({ stage, ocrProgress, pdfProgress }: Processing
     switch (stage) {
       case 'extracting':
         return {
-          icon: <FileSearch className="h-6 w-6 text-blue-600 animate-pulse" />,
-          title: 'Extracting PDF Content',
+          icon: <FileSearch className="h-6 w-6 text-[var(--cobalt)] animate-pulse" />,
+          title: 'Reading the PDF',
           description: pdfProgress
             ? `Extracting text from page ${pdfProgress.current} of ${pdfProgress.total}...`
             : 'Parsing document structure and embedded text...',
@@ -29,25 +29,25 @@ export function ProcessingStatus({ stage, ocrProgress, pdfProgress }: Processing
         };
       case 'ocr':
         return {
-          icon: <Scan className="h-6 w-6 text-indigo-600 animate-pulse" />,
-          title: 'Optical Character Recognition (OCR)',
+          icon: <Scan className="h-6 w-6 text-[var(--cobalt)] animate-pulse" />,
+          title: 'Reading the image',
           description: ocrProgress?.status || 'Analyzing image characters client-side...',
           showBar: true,
           percentage: ocrProgress?.progress || 0,
         };
       case 'summarizing':
         return {
-          icon: <Cpu className="h-6 w-6 text-purple-600 animate-spin" />,
-          title: 'DeepSeek AI Summarization',
-          description: 'Analyzing document themes, extracting key points, and synthesizing summary...',
+          icon: <Cpu className="h-6 w-6 text-[var(--oxblood)] animate-spin" />,
+          title: 'Composing the brief',
+          description: 'Finding the argument, essential details, and key takeaways...',
           showBar: false,
           percentage: 0,
         };
       default:
         return {
-          icon: <Loader2 className="h-6 w-6 text-zinc-600 animate-spin" />,
-          title: 'Processing Document',
-          description: 'Please wait a moment...',
+          icon: <Loader2 className="h-6 w-6 text-[var(--ink)] animate-spin" />,
+          title: 'Working through the document',
+          description: 'This should only take a moment.',
           showBar: false,
           percentage: 0,
         };
@@ -59,39 +59,38 @@ export function ProcessingStatus({ stage, ocrProgress, pdfProgress }: Processing
   return (
     <div
       aria-live="polite"
-      className="w-full rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 animate-in fade-in zoom-in-95 duration-200"
+      className="paper-panel editorial-reveal w-full p-5 sm:p-6"
     >
+      <div className="mb-5 flex items-center justify-between border-b border-[var(--ink)] pb-3">
+        <span className="font-utility text-[10px] uppercase tracking-[0.18em] text-[var(--oxblood)]">In production</span>
+        {details.showBar && <span className="font-utility text-[10px]">{details.percentage}%</span>}
+      </div>
       <div className="flex items-center gap-4">
-        <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-zinc-100 dark:bg-zinc-800">
+        <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center border border-[var(--rule)] bg-[var(--paper)]">
           {details.icon}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between">
-            <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+            <h4 className="font-editorial text-2xl font-semibold leading-none">
               {details.title}
             </h4>
-            {details.showBar && (
-              <span className="text-xs font-mono font-medium text-zinc-500 dark:text-zinc-400">
-                {details.percentage}%
-              </span>
-            )}
           </div>
-          <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400 truncate">
+          <p className="mt-2 truncate text-xs text-[var(--muted)]">
             {details.description}
           </p>
 
           {details.showBar && (
-            <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+            <div className="mt-4 h-1 w-full overflow-hidden bg-[var(--rule)]">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 transition-all duration-300 ease-out"
+                className="h-full bg-[var(--cobalt)] transition-all duration-300 ease-out"
                 style={{ width: `${Math.max(5, details.percentage)}%` }}
               />
             </div>
           )}
 
           {!details.showBar && (
-            <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
-              <div className="h-full w-1/3 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 animate-indeterminate" />
+            <div className="mt-4 h-1 w-full overflow-hidden bg-[var(--rule)]">
+              <div className="animate-indeterminate h-full w-1/3 bg-[var(--oxblood)]" />
             </div>
           )}
         </div>

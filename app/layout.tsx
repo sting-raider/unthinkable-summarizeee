@@ -1,21 +1,30 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Bodoni_Moda, DM_Sans, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const bodoni = Bodoni_Moda({
+  variable: "--font-editorial",
   subsets: ["latin"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
+const dmSans = DM_Sans({
+  variable: "--font-body",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+  variable: "--font-utility",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: 'Document Summary Assistant — AI Powered Document Summarization',
+  title: 'The Abstract — An Editorial Document Summarizer',
   description:
-    'Extract and summarize PDFs and images directly in your browser with DeepSeek AI. Fast, private, and responsive.',
+    'Turn PDFs and images into concise, considered briefs with private browser-based extraction.',
 };
 
 export default function RootLayout({
@@ -26,11 +35,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${bodoni.variable} ${dmSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 selection:bg-blue-100 selection:text-blue-900">
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
