@@ -1,154 +1,175 @@
-﻿# Document Summary Assistant
+# The Abstract
 
-A modern, fast, and privacy-preserving AI web application that extracts text from documents (PDFs and images) directly in your browser and generates structured, grounded summaries and key takeaway points using **DeepSeek AI**.
+The Abstract is a private, browser-first document summarizer. Drop in a PDF or image, extract readable text locally, choose the amount of detail, and generate a structured brief with key takeaways using the DeepSeek API.
 
-![Document Summary Assistant](https://raw.githubusercontent.com/shadcn-ui/ui/main/apps/www/public/og.jpg)
+The interface is designed as an editorial reading desk: source material stays visible, summaries are treated as finished briefs, and every action is explicit.
 
----
+## What it does
 
-## 🌟 Key Features
+- Accepts PDF, PNG, JPG, JPEG, and WebP files up to 10 MB.
+- Extracts PDF text page by page with PDF.js in the browser.
+- Extracts text from images with Tesseract.js OCR in the browser.
+- Normalizes extracted text and checks that it contains meaningful content.
+- Generates short, standard, or extended summaries with key points.
+- Uses map-reduce summarization for long documents.
+- Lets you preview and copy extracted text.
+- Lets you copy the brief, copy Markdown, download a `.md` file, regenerate, or start another brief.
 
-- 📄 **Multi-Format Upload**: Seamless drag-and-drop or file picker for `.pdf`, `.png`, `.jpg`, `.jpeg`, and `.webp`.
-- 🔒 **100% Client-Side Extraction**: Documents are parsed locally inside the browser using PDF.js and Tesseract.js OCR. Original files are **never uploaded** to the server, preserving document privacy and reducing server execution limits.
-- ⚡ **DeepSeek AI Integration**: Generates grounded executive summaries with structured JSON output enforcing zero hallucination.
-- 🎚️ **Customizable Detail Levels**:
-  - **Short** (~100–150 words): High-level snapshot & critical conclusion.
-  - **Medium** (~250–400 words): Balanced overview & core arguments.
-  - **Long** (~500–700 words): Comprehensive analysis & supporting context.
-- 💡 **Key Takeaways**: Automatically extracts 3–6 distinct, high-impact bulleted takeaway points.
-- 📚 **Long Document Handling**: Automatic semantic paragraph chunking and Map-Reduce synthesis for documents exceeding direct context limits.
-- 📋 **Productivity Actions**: Single-click copy for Summary or Full Markdown, Download as `.md`, and Extracted Text preview accordion.
-- 📱 **Fully Responsive**: Mobile-first design built with Tailwind CSS, supporting viewports from 375px to 1440px+.
+## Privacy model
 
----
+Original files are never uploaded. PDF parsing and image OCR happen in the browser. After extraction, only the resulting text and selected summary length are sent to the Next.js `/api/summarize` route, which calls DeepSeek. Your DeepSeek key stays on the server and is never exposed to the browser.
 
-## 🏗️ Architecture
+## Stack
+
+- Next.js 16 App Router and Turbopack
+- React 19 and TypeScript
+- Tailwind CSS 4
+- PDF.js for PDF extraction
+- Tesseract.js for image OCR
+- DeepSeek for structured summarization
+- Vitest for unit tests
+- Lucide React for interface icons
+
+## Project structure
 
 ```text
-┌────────────────────────────────────────────────────────────────────────┐
-│                          Browser (Client-Side)                         │
-│                                                                        │
-│  1. Upload Document (.pdf, .png, .jpg, .jpeg, .webp)                   │
-│  2. Validate File (Size <= 10MB, MIME type, Extension, Non-empty)      │
-│  3. Extraction:                                                        │
-│     ├─ PDF: PDF.js extracts text per page + page counts                │
-│     └─ Image: Tesseract.js extracts text via OCR with live progress    │
-│  4. Normalization (Clean whitespace, strip OCR noise, count words)     │
-│  5. Select Summary Length (Short / Medium / Long)                      │
-└───────────────────────────────────┬────────────────────────────────────┘
-                                    │ POST /api/summarize { text, length }
-                                    ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│                        Next.js Server API Route                        │
-│                                                                        │
-│  6. Validate payload structure and length bounds                       │
-│  7. DeepSeek AI Provider (`deepseek-chat`):                            │
-│     ├─ Small/Medium text: Direct structured summary prompt             │
-│     └─ Large text (>12k chars): Map-reduce chunking & synthesis        │
-│  8. Output Schema Validation: { summary: string, keyPoints: string[] } │
-└───────────────────────────────────┬────────────────────────────────────┘
-                                    │ JSON { summary, keyPoints }
-                                    ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│                          Results View & UX                             │
-│                                                                        │
-│  • Formatted Executive Summary                                         │
-│  • Bulleted Key Takeaways                                              │
-│  • Compression & Word Count Metrics                                    │
-│  • Collapsible Extracted Text Viewer                                   │
-│  • Copy / Download (.md) / Upload Another Actions                      │
-└────────────────────────────────────────────────────────────────────────┘
+app/
+  page.tsx                 Reading desk UI and workflow state
+  layout.tsx               Fonts, metadata, and document shell
+  globals.css              Editorial design tokens and global styles
+  api/summarize/route.ts   Server route for DeepSeek summarization
+
+components/
+  upload/                  Upload dropzone and selected source
+  processing/              PDF, OCR, and summarization progress
+  summary/                 Length selector, source preview, brief, and key points
+  ui/                      Shared badges and error messaging
+
+lib/
+  extraction/              PDF/OCR extraction and text normalization
+  summarization/           DeepSeek provider, prompts, chunking, and synthesis
+  validation/              File type, size, and content checks
+
+types/                     Shared document and summary contracts
+tests/                      Validation, extraction, chunking, and prompt tests
+public/pdf.worker.min.js   Browser PDF.js worker
 ```
 
----
+## Requirements
 
-## 💻 Tech Stack
+- Node.js 18 or newer
+- A DeepSeek API key
 
-- **Framework**: Next.js 16 (App Router, Turbopack)
-- **Language**: TypeScript 5
-- **UI & Styling**: React 19, Tailwind CSS 4, Lucide React icons
-- **Client Extraction**: `pdfjs-dist` (PDF parsing), `tesseract.js` (Image OCR)
-- **AI Backend**: DeepSeek API (`deepseek-chat` model)
-- **Testing**: Vitest, React Testing Library, JSDOM
-- **Deployment**: Vercel ready
+## Setup
 
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Node.js 18+ or 20+ installed
-- DeepSeek API Key ([Get one at platform.deepseek.com](https://platform.deepseek.com/))
-
-### 1. Clone & Install Dependencies
+Clone the repository and install dependencies:
 
 ```bash
-git clone https://github.com/your-username/document-summary-assistant.git
-cd document-summary-assistant
+git clone https://github.com/sting-raider/unthinkable-summarizeee.git
+cd unthinkable-summarizeee
 npm install
 ```
 
-### 2. Configure Environment Variables
-
-Copy the example configuration:
+Create `.env.local` from the example file:
 
 ```bash
 cp .env.example .env.local
 ```
 
-Edit `.env.local` and add your DeepSeek API key:
+Add your DeepSeek configuration:
 
 ```env
 DEEPSEEK_API_KEY=your_deepseek_api_key_here
+DEEPSEEK_MODEL=deepseek-v4-flash
+DEEPSEEK_BASE_URL=https://api.deepseek.com
 ```
 
-### 3. Run Development Server
+`DEEPSEEK_MODEL` and `DEEPSEEK_BASE_URL` are optional. The defaults are `deepseek-v4-flash` and `https://api.deepseek.com`.
+
+## Run locally
+
+Start the development server on the default port:
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser.
+Open [http://localhost:3000](http://localhost:3000).
 
----
+To use port 3005:
 
-## 🧪 Testing
+```bash
+npm run dev -- -p 3005
+```
 
-Run the automated Vitest unit test suite:
+Open [http://localhost:3005](http://localhost:3005).
+
+## Verify the project
+
+Run the test suite:
 
 ```bash
 npm test
 ```
 
-To run tests in watch mode:
+Run linting:
 
 ```bash
-npm run test:watch
+npm run lint
 ```
 
----
-
-## 📦 Production Build
+Create a production build:
 
 ```bash
 npm run build
+```
+
+Start the production server after building:
+
+```bash
 npm start
 ```
 
----
+## Summarization flow
 
-## ⚠️ Known Limitations
+1. The user selects or drops a supported file.
+2. The browser validates the file and extracts text locally.
+3. Extracted text is normalized and counted.
+4. The user selects Brief, Standard, or Extended detail.
+5. The client posts `{ text, length }` to `/api/summarize`.
+6. The server sends a grounded prompt to DeepSeek.
+7. Long text is chunked, summarized, and synthesized into one result.
+8. The API returns `{ summary, keyPoints, wordCount, chunksProcessed }`.
 
-1. **Scanned PDF Text**: Client-side PDF.js extracts embedded vector text streams. Scanned PDF documents without embedded text layers require pre-rendering to images before OCR.
-2. **OCR Quality**: OCR accuracy is dependent on source image clarity, contrast, and resolution.
-3. **API Rate Limits**: Standard free-tier DeepSeek API keys are subject to requests-per-minute limits. The application implements sequential batching and graceful error recovery.
+## API
 
----
+### `POST /api/summarize`
 
-## 🔮 Future Roadmap
+Request body:
 
-- [ ] Multi-lingual OCR language pack selector.
-- [ ] Export summary directly to PDF format.
-- [ ] Audio text-to-speech summary playback.
-- [ ] Interactive Q&A chat over the extracted document.
+```json
+{
+  "text": "Extracted document text",
+  "length": "short"
+}
+```
+
+`length` accepts `short`, `medium`, or `long`.
+
+Successful response:
+
+```json
+{
+  "summary": "A grounded summary of the source.",
+  "keyPoints": ["First takeaway", "Second takeaway"],
+  "wordCount": 120,
+  "model": "deepseek-v4-flash",
+  "chunksProcessed": 1
+}
+```
+
+The route validates the request, maps provider failures to clear HTTP errors, and validates the structured response before returning it.
+
+## License
+
+This project is private and currently has no published open-source license.
