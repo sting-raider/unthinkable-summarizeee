@@ -1,4 +1,4 @@
-﻿import { SummaryLength } from '@/types/document';
+import { SummaryLength } from '@/types/document';
 import { SummarizeResponse, SummaryResult } from '@/types/summary';
 import { DeepSeekSummarizationProvider, SummarizationProvider } from './deepseek';
 import { chunkText, DIRECT_SUMMARY_MAX_CHARS } from './chunkText';
@@ -25,7 +25,7 @@ export async function generateDocumentSummary(
       summary: result.summary,
       keyPoints: result.keyPoints,
       wordCount: countWords(result.summary),
-      model: 'deepseek-chat',
+      model: (provider as DeepSeekSummarizationProvider).model || 'deepseek-v4-flash',
       chunksProcessed: 1,
     };
   }
@@ -47,7 +47,7 @@ export async function generateDocumentSummary(
     summary: finalResult.summary,
     keyPoints: finalResult.keyPoints,
     wordCount: countWords(finalResult.summary),
-    model: 'deepseek-chat',
+    model: (provider as DeepSeekSummarizationProvider).model || 'deepseek-v4-flash',
     chunksProcessed: chunks.length,
   };
 }

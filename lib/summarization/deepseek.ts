@@ -1,4 +1,4 @@
-﻿import { SummaryLength } from '@/types/document';
+import { SummaryLength } from '@/types/document';
 import { SummaryResult } from '@/types/summary';
 import {
   SYSTEM_PROMPT,
@@ -29,12 +29,16 @@ function cleanJsonOutput(raw: string): string {
 export class DeepSeekSummarizationProvider implements SummarizationProvider {
   private apiKey: string;
   private baseUrl: string;
-  private model: string;
+  public readonly model: string;
 
-  constructor(apiKey?: string, baseUrl = 'https://api.deepseek.com', model = 'deepseek-chat') {
+  constructor(
+    apiKey?: string,
+    baseUrl?: string,
+    model?: string
+  ) {
     this.apiKey = apiKey || process.env.DEEPSEEK_API_KEY || '';
-    this.baseUrl = baseUrl;
-    this.model = model;
+    this.baseUrl = baseUrl || process.env.DEEPSEEK_BASE_URL || 'https://api.deepseek.com';
+    this.model = model || process.env.DEEPSEEK_MODEL || 'deepseek-v4-flash';
   }
 
   private async callDeepSeek(userPrompt: string): Promise<SummaryResult> {
